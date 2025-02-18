@@ -21,12 +21,21 @@ let youtuber3 = {
     videonum : "726개"
 }
 
+let id = 1
 let db = new Map()
-db.set(1, youtuber1)
-db.set(2, youtuber2)
-db.set(3, youtuber3)
+db.set(id++, youtuber1)
+db.set(id++, youtuber2)
+db.set(id++, youtuber3)
 
-app.get('/youtuber/:id', function(req, res){
+app.get("/youtubers", function(req, res){
+    var youtubers = {}
+    db.foreach(function(youtuber){
+        jsonObject[youtuber.channelTitle] = value
+    })
+    res.json(jsonObject)
+})
+
+app.get('/youtubers/:id', function(req, res){
     let {id} = req.params
     id = parseInt(id)
 
@@ -38,4 +47,15 @@ app.get('/youtuber/:id', function(req, res){
     }else {
         res.json(youtuber)
     }
+})
+
+app.use(express.json())
+app.post('/youtubers', (req, res) =>{
+    console.log(req.body)
+
+    db.set(id++, req.body)
+
+    res.json({
+        message : `${db.get(id-1).channelTitle}님, 유튜버 생활을 응원합니다!`
+    })
 })
